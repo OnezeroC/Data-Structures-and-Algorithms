@@ -1,5 +1,3 @@
- 
-# Makefile
 CC = g++
 CFLAGS = -Wall -std=c++17
 TARGET = hello
@@ -7,7 +5,7 @@ TARGET = hello
 all: $(TARGET)
 
 $(TARGET): hello.cpp
-	$(CC) $(CFLAGS) -o $@ $<
+	(CC)(CC) (CFLAGS) -o @ @ <
 
 clean:
 	rm -f $(TARGET)
