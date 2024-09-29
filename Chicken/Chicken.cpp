@@ -90,17 +90,29 @@ public:
     }
 };
 
-int main()
-{
+int main(){
+    auto print = [](const Chicken &c){
+    std::cout << "Hi, everyone! My name is " << c.getName() 
+    << ", I am " << c.getAge() << " years old." << std::endl;
+    };
     Chicken c(24, "Kunkun");
-    std::cout << "Hi, everyone! My name is " << c.getName() << ", I am " << c.getAge() << " years old." << std::endl;
-
-    Chicken c2 = c; // 测试复制构造函数
-    std::cout << "Hi, everyone! My name is " << c2.getName() << ", I am " << c2.getAge() << " years old." << std::endl;
-
-    Chicken c3, c4;
-    c4 = c3 = c; // 测试赋值操作符
-    std::cout << "Hi, everyone! My name is " << c4.getName() << ", I am " << c4.getAge() << " years old." << std::endl;
-
+    print(c);
+ 
+    Chicken d;
+    d = c;
+    print(d); // 测试【赋值运算符】是否正确，能正确输出给 20 分
+    Chicken a = c;
+    print(a); // 测试【赋值构造函数】是否正确，能正确输出给 20 分
+    
+    c.setName("Xukun Cai");
+    print(c);
+    print(a);
+    print(d); // 测试是否为【深度复制】，本行与上两行能正确输出给 20 分
+    
+    Chicken b;
+    b = d = c;
+    print(b);
+    print(d); // 测试【连续赋值】功能，本行与上一行能正确输出给 20 分
     return 0;
 }
+
