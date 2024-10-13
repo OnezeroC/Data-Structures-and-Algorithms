@@ -1,6 +1,8 @@
 #include <initializer_list>
 #include <iostream>
 
+using namespace std;
+
 template <typename T>
 class SingleLinkedList
 {
@@ -81,6 +83,7 @@ void SingleLinkedList<T>::insert(T _val){
     }
     else
     {
+        newNode->next = currentPos->next;
         currentPos->next = newNode;
         currentPos = newNode;
     }
@@ -91,7 +94,9 @@ template<typename T>
 void SingleLinkedList<T>::remove()
 {
     if (currentPos == nullptr)
+    {
         // Do nothing
+    }
     else if (size == 1)
     {
         Node* t = head;

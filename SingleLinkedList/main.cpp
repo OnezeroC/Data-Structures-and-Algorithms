@@ -13,7 +13,7 @@ int main() {
     b.printList(); // 测试[定义值]操作是否正确，包括可能的空链表测试
 
     SingleLinkedList<char> e;
-    std::cout << b.isEmpty() << ""
+    std::cout << b.isEmpty() << " "
               << e.isEmpty() << std::endl; // 测试空链表判断操作是否正确
 
     SingleLinkedList<double> c1;
