@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{xeCJK}
+\geometry{a4paper, margin=1in}
+
+\title{List类功能测试报告}
+\author{陈奕林}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{简介}
+本文档报告了对 \texttt{List} 类的功能测试结果。测试的目的是验证链表类中常见操作的正确性，包括插入、删除、遍历以及迭代器的功能。
+
+\section{测试的功能}
+在 \texttt{List.cpp} 文件中测试了以下 \texttt{List} 类的功能：
+
+\begin{itemize}
+    \item \textbf{构造和初始化:}
+        \begin{itemize}
+            \item 使用 \texttt{List<int> myList\{10, 20, 30, 40, 50\}} 初始化包含多个元素的链表。
+        \end{itemize}
+    \item \textbf{压入与弹出操作:}
+        \begin{itemize}
+            \item \texttt{push\_back(60)} 在链表末尾添加元素。
+            \item \texttt{push\_front(5)} 在链表头部添加元素。
+            \item \texttt{pop\_back()} 删除链表最后一个元素。
+            \item \texttt{pop\_front()} 删除链表第一个元素。
+        \end{itemize}
+    \item \textbf{访问操作:}
+        \begin{itemize}
+            \item \texttt{front()} 返回链表第一个元素。
+            \item \texttt{back()} 返回链表最后一个元素。
+        \end{itemize}
+    \item \textbf{插入与删除:}
+        \begin{itemize}
+            \item \texttt{insert(iterator, value)} 在迭代器位置插入元素。
+            \item \texttt{erase(iterator)} 删除迭代器位置的元素。
+        \end{itemize}
+    \item \textbf{大小与空检查:}
+        \begin{itemize}
+            \item \texttt{size()} 返回链表中的元素数量。
+            \item \texttt{empty()} 检查链表是否为空。
+        \end{itemize}
+    \item \textbf{移动操作:}
+        \begin{itemize}
+            \item 使用 \texttt{std::move()} 测试移动构造函数。
+            \item \texttt{clear()} 用于清空链表的所有元素。
+        \end{itemize}
+\end{itemize}
+
+\section{总结}
+通过对 \texttt{List} 类的测试，验证了其正确处理元素的插入、删除和通过迭代器访问的能力。此外，该类的内存管理功能（如移动构造函数、析构函数等）表现符合预期。
+
+\end{document}
