@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{fontenc}
+\usepackage{xeCJK}
+
+\title{Binary Search Tree Implementation Report}
+\author{陈奕林 \and ChatGPT}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+本报告旨在介绍二叉搜索树（Binary Search Tree, BST）的实现和测试结果，特别是对 \texttt{remove} 函数的修改及其效果的分析。
+
+\section{Modified \texttt{remove} Function}
+在本项目中，\texttt{remove} 函数的实现进行了修改，以避免递归删除和节点内容复制。新实现通过一个辅助函数 \texttt{detachMin}  来查找并删除右子树中的最小节点，以替代被删除节点。这种方法的优势在于：
+\begin{itemize}
+    \item 通过指针替换，减少了内存复制的开销。
+    \item 简化了节点删除过程，使得代码逻辑更加清晰。
+    \item 维护了树的性质，确保删除操作的效率。
+\end{itemize}
+
+\subsection{DetachMin Function}
+\texttt{detachMin}  函数的主要任务是从以指定节点为根的子树中找到最小节点，并将其从树中删除。该函数的实现如下：
+\begin{verbatim}
+BinaryNode* detachMin(BinaryNode *&t) {
+    if (t == nullptr) {
+        return nullptr; // 空树，返回 nullptr
+    }
+    if (t->left == nullptr) {
+        BinaryNode *minNode = t;
+        t = t->right; // 用右子树替换最小节点
+        return minNode; // 返回最小节点
+    }
+    return detachMin(t->left); // 递归查找左子树中的最小节点
+}
+\end{verbatim}
+
+\section{Testing and Results}
+为了验证二叉搜索树的功能，编写了多个测试用例。以下是主要测试用例的输出结果和分析：
+
+\subsection{Test Outputs}
+\begin{verbatim}
+    Initial Tree:
+    3
+    5
+    7
+    10
+    12
+    15
+    18
+    Minimum element: 3
+    Maximum element: 18
+    Contains 7? Yes
+    Contains 20? No
+    Tree after removing 7:
+    3
+    5
+    10
+    12
+    15
+    18
+    Tree after removing 10:
+    3
+    5
+    12
+    15
+    18
+    Tree after making empty:
+    Empty tree
+    Is tree empty? Yes
+\end{verbatim}
+
+\subsection{Analysis}
+从测试输出可以看到，树的插入、查找、删除和清空操作均正常工作。在删除操作中，使用 \texttt{detachMin} 函数成功地替代了被删除节点，而没有对节点内容进行复制，保证了操作的高效性。
+
+\begin{itemize}
+
+\item \textbf{删除节点7和10后，树的结构保持了二叉搜索树的性质}，左子树的所有节点都小于根节点的值，右子树的所有节点都大于根节点的值。
+
+\item \textbf{测试用例覆盖了多种场景}，包括节点的插入、查找、删除和清空，验证了整个实现的正确性和有效性。
+
+\end{itemize}
+
+\section{Conclusion}
+本报告介绍了对二叉搜索树的 \texttt{remove} 函数的修改及其测试结果。新的实现通过优化删除逻辑，提高了代码的效率和可读性。后续可以继续优化其他部分，以进一步提升性能。
+
+\end{document}
