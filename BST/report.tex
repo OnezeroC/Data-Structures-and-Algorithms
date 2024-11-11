@@ -5,7 +5,7 @@
 \usepackage{fontenc}
 \usepackage{xeCJK}
 
-\title{Binary Search Tree Implementation Report}
+\title{AVL树的\texttt{remove}函数实现报告}
 \author{陈奕林 \and ChatGPT}
 \date{\today}
 
@@ -13,80 +13,40 @@
 
 \maketitle
 
-\section{Introduction}
-本报告旨在介绍二叉搜索树（Binary Search Tree, BST）的实现和测试结果，特别是对 \texttt{remove} 函数的修改及其效果的分析。
+\section*{AVL树的\texttt{remove}函数实现报告}
 
-\section{Modified \texttt{remove} Function}
-在本项目中，\texttt{remove} 函数的实现进行了修改，以避免递归删除和节点内容复制。新实现通过一个辅助函数 \texttt{detachMin}  来查找并删除右子树中的最小节点，以替代被删除节点。这种方法的优势在于：
-\begin{itemize}
-    \item 通过指针替换，减少了内存复制的开销。
-    \item 简化了节点删除过程，使得代码逻辑更加清晰。
-    \item 维护了树的性质，确保删除操作的效率。
-\end{itemize}
+\texttt{remove}函数的设计旨在删除节点的同时保持AVL树的平衡特性。AVL树的特性确保每个节点的左、右子树高度差（即平衡因子）不超过1，从而使插入、删除和查找操作的时间复杂度均能保持在 $O(\log n)$ 级别。为此，在删除节点后，AVL树需要通过适当的旋转来恢复平衡。
 
-\subsection{DetachMin Function}
-\texttt{detachMin}  函数的主要任务是从以指定节点为根的子树中找到最小节点，并将其从树中删除。该函数的实现如下：
-\begin{verbatim}
-BinaryNode* detachMin(BinaryNode *&t) {
-    if (t == nullptr) {
-        return nullptr; // 空树，返回 nullptr
-    }
-    if (t->left == nullptr) {
-        BinaryNode *minNode = t;
-        t = t->right; // 用右子树替换最小节点
-        return minNode; // 返回最小节点
-    }
-    return detachMin(t->left); // 递归查找左子树中的最小节点
-}
-\end{verbatim}
+\subsection*{主要实现步骤}
 
-\section{Testing and Results}
-为了验证二叉搜索树的功能，编写了多个测试用例。以下是主要测试用例的输出结果和分析：
+\begin{enumerate}
+    \item \textbf{删除节点}：
+    \begin{itemize}
+        \item \texttt{remove}函数使用递归方式查找并删除指定的节点。
+        \item 若删除的节点有两个子节点，则使用右子树的最小节点（即后继节点）替代被删除节点的值，以保持二叉搜索树的性质。
+        \item 删除节点完成后，返回到父节点，逐层检查并更新高度。
+    \end{itemize}
+    
+    \item \textbf{调整平衡}：
+    \begin{itemize}
+        \item 在每次递归返回时调用\texttt{balance}函数，判断是否需要旋转以恢复平衡。
+        \item 如果左子树比右子树高2，则执行右旋\texttt{rotateWithLeftChild}或双旋转\texttt{doubleWithLeftChild}。
+        \item 如果右子树比左子树高2，则执行左旋\texttt{rotateWithRightChild}或双旋转\texttt{doubleWithRightChild}。
+    \end{itemize}
 
-\subsection{Test Outputs}
-\begin{verbatim}
-    Initial Tree:
-    3
-    5
-    7
-    10
-    12
-    15
-    18
-    Minimum element: 3
-    Maximum element: 18
-    Contains 7? Yes
-    Contains 20? No
-    Tree after removing 7:
-    3
-    5
-    10
-    12
-    15
-    18
-    Tree after removing 10:
-    3
-    5
-    12
-    15
-    18
-    Tree after making empty:
-    Empty tree
-    Is tree empty? Yes
-\end{verbatim}
+    \item \textbf{高度更新}：
+    \begin{itemize}
+        \item 每次平衡操作后，重新计算旋转后节点的高度。节点高度为其左右子节点高度中的较大值加1。
+    \end{itemize}
+\end{enumerate}
 
-\subsection{Analysis}
-从测试输出可以看到，树的插入、查找、删除和清空操作均正常工作。在删除操作中，使用 \texttt{detachMin} 函数成功地替代了被删除节点，而没有对节点内容进行复制，保证了操作的高效性。
+\subsection*{平衡操作的旋转逻辑}
 
 \begin{itemize}
-
-\item \textbf{删除节点7和10后，树的结构保持了二叉搜索树的性质}，左子树的所有节点都小于根节点的值，右子树的所有节点都大于根节点的值。
-
-\item \textbf{测试用例覆盖了多种场景}，包括节点的插入、查找、删除和清空，验证了整个实现的正确性和有效性。
-
+    \item \textbf{单旋转}：用于修正简单的左右不平衡。例如，当左子树比右子树高2时，执行单右旋，使得树重新平衡。
+    \item \textbf{双旋转}：用于修正复杂的不平衡情况。当左子树的右子树较高（或右子树的左子树较高）时，需先对不平衡子树进行子旋转，再对祖父节点进行旋转，从而实现平衡。
 \end{itemize}
 
-\section{Conclusion}
-本报告介绍了对二叉搜索树的 \texttt{remove} 函数的修改及其测试结果。新的实现通过优化删除逻辑，提高了代码的效率和可读性。后续可以继续优化其他部分，以进一步提升性能。
+通过上述步骤，\texttt{remove}函数在删除节点后能有效恢复AVL树的平衡，使树的高度保持在对数级增长，从而确保操作的高效性。
 
 \end{document}

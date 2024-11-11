@@ -5,11 +5,11 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++11
 
 # Source files
-SRCS = test.cpp
+SRCS = main.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 # Target executable
-TARGET = test
+TARGET = main
 
 # Default rule
 all: $(TARGET)
