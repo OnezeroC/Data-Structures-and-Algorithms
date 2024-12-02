@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{xeCJK}  % 中文支持
+\usepackage{fontspec}  % 支持字体设置，适用于 XeLaTeX 编译器
+\usepackage{microtype}  % 改进排版
+
+\setCJKmainfont{SimSun}  % 设置中文字体，可以根据需要调整
+
+\title{HeapSort 实现与性能对比报告}
+\author{陈奕林 \and ChatGPT}
+
+\begin{document}
+	\maketitle
+	
+	\section{整体设计思路}
+	本报告介绍了一个自定义的堆排序实现，并通过对比 `std::sort\_heap()`来分析性能差异。堆排序是一种基于完全二叉树的排序算法，它通过将待排序元素构建成一个堆，然后反复将堆顶元素与最后一个元素交换并调整堆，达到排序目的。
+	
+	在实现中，我们首先定义了一个 `HeapSort` 类，该类模板化设计，能够对任意类型的容器（如 `std::vector`）进行堆排序。实现了基本的堆操作，包括 `heapify`、`buildHeap` 和 `sort` 方法。
+	
+	\section{核心算法}
+	堆排序的基本流程如下：
+	\begin{enumerate}
+		\item 构建最大堆：将待排序数组转换为最大堆。
+		\item 交换堆顶元素与数组末尾元素，堆的大小减一。
+		\item 调整堆结构，使其重新成为最大堆。
+		\item 重复上述过程，直到堆的大小为1。
+	\end{enumerate}
+	
+	\section{测试流程}
+	测试分为以下几步：
+	
+	\begin{itemize}
+		\item 生成四种不同的测试序列：
+		\begin{enumerate}
+			\item 随机序列：随机生成的 1000000 个整数。
+			\item 有序序列：从 0 到 999999 的递增序列。
+			\item 逆序序列：从 999999 到 0 的递减序列。
+			\item 部分重复序列：每 1000 个元素重复一次的序列。
+		\end{enumerate}
+		\item 使用 HeapSort 对每个序列进行排序，并记录排序所花费的时间。
+		\item 使用 std::sort\_heap() 对每个序列进行排序，并记录排序所花费的时间。
+		\item 输出每次排序的时间，并检查排序结果是否正确。
+	\end{itemize}
+	
+	\section{测试结果}
+	以下是不同序列的排序时间（单位：秒），并与 std::sort\_heap() 的时间进行了对比：
+	
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{序列类型} & \textbf{堆排序时间} & \textbf{std::sortheap 时间} \\
+			\hline
+			随机序列 & 0.0847808秒 & 0.0323649秒 \\
+			有序序列 & 0.0437664 & 0.030287秒 \\
+			逆序序列 & 0.0445614秒 & 0.0288435秒 \\
+			部分重复序列 & 0.0525432秒 & 0.0294509秒 \\
+			\hline
+		\end{tabular}
+		\caption{堆排序与std::sort\_heap的性能对比}
+	\end{table}
+	
+	\section{时间复杂度分析}
+	堆排序的时间复杂度为 $O(n \log n)$，其中 $n$ 是待排序序列的大小。堆排序的关键操作是构建堆和对堆进行调整（heapify）。构建堆的时间复杂度为 $O(n)$，而每次调整堆的时间复杂度为 $O(\log n)$，因此总的时间复杂度为 $O(n \log n)$。
+	
+	与 std::sort\_heap() 的效率对比：
+	
+	std::sort\_heap() 的实现通常是通过堆排序或者其他优化方法实现的，其时间复杂度也是 $O(n \log n)$。
+	在本次测试中，HeapSort 和 std::sort\_heap() 在不同类型的数据上表现出不同的性能差异。这些差异可能与实际堆的实现、内存访问模式以及排序过程中内部优化策略有关。std::sort\_heap() 通常在优化上会比手动实现的堆排序更加高效，尤其是在某些数据结构优化和缓存优化方面。
+	
+	\section{总结}
+	本报告实现了一个自定义的堆排序算法，并与 std::sort\_heap() 进行了性能对比。从测试结果来看，在处理不同类型的序列时，std::sort\_heap() 通常表现得更加高效。这主要是由于 std::sort\_heap() 经过高度优化，能够在实际应用中提供更好的性能。然而，手动实现堆排序为理解和实现堆排序提供了深入的思路，并可以在需要时进行灵活调整。
+	
+\end{document}
